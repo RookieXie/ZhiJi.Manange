@@ -1,0 +1,76 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebMVC.Models;
+@model PageInfo
+
+@{
+    int count = Model.Count;
+    string url = Model.PageUrl;
+    int pageIndex = Model.PageIndex;
+    int pageSize = Model.PageSize;
+
+    int pageCount = (count + pageSize - 1) / pageSize;
+    int nextIndex = pageIndex + 1;
+    int preIndex = pageIndex - 1;
+}
+
+<div style="margin-top:10px;" class="cl pd-5 bg-1 bk-gray mt-20">
+    <span style="margin-right:8px;" class="l"><a href="javascript:;" onclick="firstpage()" class="btn btn-success radius">首页</a></span>
+    <span style="margin-right:8px;" class="l"><a href="javascript:;" onclick="prepage()" class="btn btn-success radius">上页</a></span>
+    <span style="margin-right:8px;" class="l"><a href="javascript:;" onclick="nextpage()" class="btn btn-success radius">下页</a></span>
+    <span style="margin-right:8px;" class="l"><a href="javascript:;" onclick="lastpage()" class="btn btn-success radius">尾页</a></span>
+
+    <span style="margin-right:8px;line-height:2;" class="l">设置显示条数</span>
+    <span class="l" style="line-height:2;"><input type="text" class="input-text" style="width:50px;height:25px;" value="30" id="pagesize" /> 条</span>
+    @*<span style="margin-right:8px;" class="l"><a href="javascript:;" onclick="setpagesize()" class="btn btn-success radius">确定</a></span>*@
+
+    <span class="r" style="line-height:2">共有：<strong>@pageCount</strong> 页面</span>
+
+    <span class="r" style="margin-right:30px;line-height:2;"><input type="text" class="input-text" style="width:50px;height:25px;" value="1" id="jumpindex" /> 页</span>
+    <span style="margin-right:5px;" class="r"><a href="javascript:;" onclick="jumppage()" class="btn btn-success radius">跳转到：</a></span>
+</div>
+
+<script>
+    $(function () {
+        $("#jumpindex").val("@pageIndex");
+        $("#pagesize").val("@pageSize");
+    })
+
+    function firstpage() {
+        var pageSize = $("#pagesize").val();
+        var url = "@Html.Raw(url)" + "pageSize=" + pageSize +"&pageIndex=" + "1";
+    window.location.href = url;
+    };
+
+    @*function setpagesize() {
+        var pageSize = $("#pagesize").val();
+        var url = "@Html.Raw(url)" + "pagesize=" + pageSize;
+        window.location.href = url;
+    }*@
+
+    function nextpage() {
+        var pageSize = $("#pagesize").val();
+    var url = "@Html.Raw(url)" + "pageSize=" + pageSize + "&pageIndex="+ "@nextIndex";
+    window.location.href = url;
+}
+
+    function prepage() {
+        var pageSize = $("#pagesize").val();
+    var url = "@Html.Raw(url)" + "pageSize=" + pageSize + "&pageIndex=" + "@preIndex";
+    window.location.href = url;
+}
+    function lastpage() {
+        var pageSize = $("#pagesize").val();
+    var url = "@Html.Raw(url)" + "pageSize=" + pageSize + "&pageIndex=" + "@pageCount";
+    window.location.href = url;
+    }
+
+    function jumppage() {
+        var pageSize = $("#pagesize").val();
+        var pageIndex = $("#jumpindex").val();
+        var url = "@Html.Raw(url)" + "pageSize=" + pageSize + "&pageIndex=" + pageIndex;
+    window.location.href = url;
+}
+</script>
+

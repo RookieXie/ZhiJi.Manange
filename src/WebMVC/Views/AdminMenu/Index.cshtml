@@ -1,0 +1,169 @@
+﻿@using Model;
+@{
+    ViewData["Title"] = "权限管理";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+    List<ViewMenu> menus = ViewBag.Menus;
+
+}
+
+<style type="text/css">
+    .margin-0 {
+        margin-top:0px;
+        margin-bottom:0px;
+        padding-top:0px;
+        padding-bottom:0px;
+    }
+</style>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 权限管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    @*<div class="text-c">
+        <form class="Huiform" method="post" action="" target="_self">
+            <input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+            <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+        </form>
+    </div>*@
+    <div class="cl pd-5 bg-1 bk-gray"> <span class="l">
+        <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+        <a href="javascript:;" onclick="admin_permission_add('添加节点','@Url.Action("Add")','0','1','800','450')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加节点</a></span> <span class="r">共有数据：<strong>@menus.Count</strong> 条</span> </div>
+
+        
+            @*@foreach (var it in menus)
+            {
+                <tr class="text-c">
+                    <td><input type="checkbox" value="@it.Id" name="checkbox"></td>
+                    <td>@it.Id</td>
+                    <td>@it.Name</td>
+                    <td>@it.Url</td>
+                    <td><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','@Url.Action("Edit")','@it.Id','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'@it.Id')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+                </tr>
+        }*@ 
+            @foreach (var it in menus)
+    {
+        <dl class="permission-list">
+
+
+            <dt>
+                <label>
+                    <input class="menucheckbox" type="checkbox" value="@it.Id" name="menuId" id="menuId">
+                    @it.Name
+                </label>
+                <span><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','@Url.Action("Edit")','@it.Id','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'@it.Id')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></span>
+                <span> <a title="添加右侧链接" href="javascript:;" onclick="admin_permission_add('添加右侧链接','@Url.Action("Add")','@it.Id','2','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe600;</i></a></span>
+            </dt>
+            <dd class="margin-0" style="padding-top: 0px; padding-bottom: 0px;">
+                @foreach (var vmenu in it.SubMenus)
+        {
+            <dl class="permission-list">
+                <dt>
+                    <label class="">
+                        <input class="menucheckbox" type="checkbox" value="@vmenu.Id" name="menuId" id="menuId">
+                        @vmenu.Name
+                    </label>
+                    <span><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','@Url.Action("Edit")','@vmenu.Id','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'@vmenu.Id')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></span>
+                    <span> <a title="添加页内链接" href="javascript:;" onclick="admin_permission_add('添加页内链接','@Url.Action("Add")','@vmenu.Id','3','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe600;</i> </a></span>
+                </dt>
+                <dd class="margin-0" style="padding-top: 0px; padding-bottom: 0px;">
+                    @foreach (var sub in vmenu.SubMenus)
+    {
+                    <dl class="cl permission-list2">
+                        <dt>
+                            <label class="">
+                                <input class="menucheckbox" type="checkbox" value="@sub.Id" name="menuId" id="menuId">
+                                @sub.Name
+                            </label>
+                            <span><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','@Url.Action("Edit")','@sub.Id','800','450')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'@sub.Id')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></span>
+                        </dt>
+                       
+                    </dl>
+                    }
+
+
+                    @*<label class="c-orange"><input type="checkbox" value="" name="menuId" id="menuId"> 只能操作自己发布的</label>*@
+                </dd>
+            </dl>
+}
+
+            </dd>
+        </dl>
+}
+
+
+    
+</div>
+
+
+@section ScriptSection
+    {
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        /*
+            参数解释：
+            title	标题
+            url		请求的url
+            id		需要操作的数据id
+            w		弹出层宽度（缺省调默认值）
+            h		弹出层高度（缺省调默认值）
+        */
+        /*管理员-权限-添加*/
+        function admin_permission_add(title, url, id,type, w, h) {
+            var url = url + "?id=" + id+"&type="+type;
+            layer_show(title, url, w, h);
+        }
+        /*管理员-权限-编辑*/
+        function admin_permission_edit(title, url, id, w, h) {
+            var url = url + "?id=" + id;
+            layer_show(title, url, w, h);
+        }
+
+        /*管理员-权限-删除*/
+        function admin_permission_del(obj, id) {
+            layer.confirm('确认要删除吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete")',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        location.replace(location.href);
+                        layer.msg('已删除!', { icon: 1, time: 1000 });
+                    },
+                    error: function (data) {
+                        console.log(data.msg);
+                    },
+                });
+            });
+        }
+
+        function datadel() {
+            layer.confirm('确认要删除吗？', function (index) {
+                var checkIds = [];
+                var checks = document.getElementsByName("checkbox");
+                for (i = 0; i < checks.length; i++) {
+                    if (checks[i].checked) {
+                        checkIds.push(checks[i].value);
+                    }
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/adminMenu/DeleteRange",
+                    data: { ids: checkIds },
+                    //dataType: "json",
+                    success: function (data) {
+                        layer.msg('成功!', { icon: 1, time: 1000 });
+                        location.replace(location.href);
+
+                    },
+                    error: function (data) {
+                        //layer.msg('失败!', { icon: 2, time: 1000 });
+                    },
+                });
+            });
+
+        }
+    </script>
+}
+
+
+

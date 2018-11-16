@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewData["Title"] = "添加权限";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+    int parentId = ViewBag.ParentId;
+    int type = ViewBag.Type;
+}
+
+<article class="page-container">
+    <form class="form form-horizontal" id="form-admin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>权限名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>链接地址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="" placeholder="Url" id="url" name="url">
+            </div>
+        </div>
+
+        @*<div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">权限类型：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width:150px;">
+                    <select class="select" name="type" size="1">
+                        <option value="1">文件夹</option>
+                        <option value="2">右侧链接</option>
+                        <option value="3">页内链接</option>
+                    </select>
+                </span>
+            </div>
+        </div>*@
+
+        <div class="row cl" style="display:none">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Type：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="@type" placeholder="type" id="type" name="type">
+            </div>
+        </div>
+
+        <div class="row cl" style="display:none">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>ParentId：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="@parentId" placeholder="parentid" id="parentid" name="parentid">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>显示顺序：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="0" placeholder="0" id="orderNum" name="orderNum">
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否显示：</label>
+            <div class="formControls col-xs-8 col-sm-9 skin-minimal">
+                <div class="radio-box">
+                    <input name="isDisplay" type="radio" id="isDisplay-1" value="true" checked>
+                    <label for="isDisplay-1">显示</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" id="isDisplay-2" name="isDisplay" value="false">
+                    <label for="isDisplay-2">隐藏</label>
+                </div>
+            </div>
+        </div>
+        @*<div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+            </div>
+        </div>
+        <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" placeholder="@@" name="email" id="email">
+                </div>
+            </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">角色：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width:150px;">
+                    <select class="select" name="adminRole" size="1">
+                        <option value="0">超级管理员</option>
+                        <option value="1">总编</option>
+                        <option value="2">栏目主辑</option>
+                        <option value="3">栏目编辑</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">备注：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <textarea name="" cols="" rows="" class="textarea" placeholder="说点什么...100个字符以内" dragonfly="true" onKeyUp="$.Huitextarealength(this,100)"></textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+            </div>
+        </div>*@
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+
+@section ScriptSection{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+        
+            $("#form-admin-add").validate({
+                
+              
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: '@Url.Action("Add_Save")',
+                        success: function (data) {
+                            parent.window.location.href = "/adminMenu";
+                            layer.msg('添加成功!', { icon: 1, time: 1000 });
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            //layer.msg('error!', { icon: 2, time: 1000 });
+                        }
+                    });
+                    
+                }
+            });
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+}
+

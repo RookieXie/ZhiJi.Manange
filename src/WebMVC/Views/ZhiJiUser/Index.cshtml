@@ -1,0 +1,118 @@
+﻿@using WebMVC.Models;
+@using Model;
+@{
+    ViewData["Title"] = "主播列表";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+    List<ZJ_User> users = ViewBag.Users;
+    string userId = ViewBag.userId;
+    int status = ViewBag.status;
+    PageInfo pageInfo = ViewBag.PageInfo;
+    int count = pageInfo.Count;
+}
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 知几用户列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        用户id:<input type="text" class="input-text" style="width:100px" placeholder="输入id" id="searchKey" name="" value="@userId">
+
+        用户类型:<select id="GuildSelector" name="GuildId" class="select" style="width:100px;">
+            <option value="-1" selected=@(status==-1?true:false)>全部</option>
+            <option value="0" selected=@(status==0?true:false)>用户</option>
+            <option value="1" selected=@(status==1?true:false)>答主</option>
+        </select>
+        <button onclick="search()" type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i>搜索</button>
+    </div>
+    <table class="table table-border table-bordered table-bg table-sort" id="table-sort">
+        <thead>
+            <tr>
+                <th scope="col" colspan="15">列表</th>
+            </tr>
+            <tr class="text-c">
+                @*<th width="25"><input type="checkbox" name="" value=""></th>*@
+                <th width="40">ID</th>
+                <th width="90">昵称</th>
+                <th width="130">头像</th>
+                <th width="100">是否答主</th>
+
+                <th width="100">问答时长</th>
+                <th width="100">价格</th>
+
+                <th width="100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < users.Count; i++)
+            {
+                var index = i + 1;
+                <tr class="text-c">
+                    @*<td><input type="checkbox" value="@anchors[i].AnchorId" name="checkbox"></td>*@
+                    <td>@users[i].FId</td>
+                    <td>@users[i].NickName</td>
+                    @*<td>@(!string.IsNullOrEmpty(anchors[i].GuildNames) ? anchors[i].GuildNames + "(Id:" + anchors[i].GuildCode + ")" : "")</td>*@
+
+                    <td><img width="80" class="picture-thumb" src="@users[i].HeadImg"></td>
+
+                    @if (users[i].UserType == 1)
+                    {
+
+                        <td class="td-status"><span class="label label-success radius">答主</span></td>
+                    }
+                    else
+                    {
+                        <td class="td-status"><span class="label radius">用户</span></td>
+
+                    }
+
+
+                    <td>@users[i].AnswerTime 小时</td>
+                    <td>@users[i].AnswerPrice 元</td>
+
+                    @*<a style="text-decoration:none" onClick="admin_stop(this,'@anchor[i].Id')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe631;</i></a>*@
+                    <td class="td-manage">
+                        <a title="编辑" href="javascript:;" onclick="anchor_edit_phone('主播编辑','@Url.Action("Index_Update")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+
+                        @*<a title="上下架" href="javascript:;" onclick="anchor_edit_videoId('主播编辑','@Url.Action("Edit_VideoId")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>*@
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    @Html.Partial("~/Views/Shared/PageBar.cshtml", pageInfo)
+</div>
+
+@section ScriptSection{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+
+        /*
+            参数解释：
+            title	标题
+            url		请求的url
+            id		需要操作的数据id
+            w		弹出层宽度（缺省调默认值）
+            h		弹出层高度（缺省调默认值）
+        */
+
+        /*编辑绑定电话*/
+        function anchor_edit_phone(title, url, id, w, h) {
+
+            var url = url +"?userId="+ id;
+            layer_show(title, url, w, h);
+        }
+
+
+       function search() {
+           var searchKey = $("#searchKey").val();
+           var GuildSelectorId = $("#GuildSelector").val();
+           var url = "@Url.Action("index")" + "?userId=" + searchKey + "&status=" + GuildSelectorId;
+            location.replace(url);
+        };
+    </script>
+}
+

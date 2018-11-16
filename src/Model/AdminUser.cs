@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+
+namespace Model
+{
+    public class AdminUser
+    {
+        /// <summary>
+        /// Id
+        /// </summary>
+        [Key]
+        public int Id { get; set; }
+
+        /// <summary>
+        /// 账户名
+        /// </summary>
+        [MaxLength(16)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 用户密码
+        /// </summary>
+        [MaxLength(16)]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// 姓名
+        /// </summary>
+        [MaxLength(50)]
+        public string RealName { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        [MaxLength(16)]
+        public string NickName { get; set; }
+
+        //public int Gender { get; set; }
+        /// <summary>
+        /// 电话号码
+        /// </summary>
+        [MaxLength(15)]
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// 性别 1男  2女
+        /// </summary>
+        public int Gender { get; set; }
+
+        /// <summary>
+        /// 密钥
+        /// </summary>
+        [MaxLength(10)]
+        public string PwdFlag { get; set; }
+
+        /// <summary>
+        /// 用来区分是否是渠道用户 1为渠道用户 2-工会用户
+        /// </summary>
+        public int? Type { get; set; } = 0;
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 状态 默认0    未启用:0，启用1,
+        /// </summary>
+        public int Status { get; set; } = 0;
+
+        /// <summary>
+        /// 状态时间
+        /// </summary>
+        public DateTime StatusTime { get; set; } = DateTime.Now;
+
+        public List<AdminUserRole> UserRoles { get; set; }
+    }
+}
