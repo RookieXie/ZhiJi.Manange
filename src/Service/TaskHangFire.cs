@@ -24,7 +24,7 @@ namespace Service
         }
         public async Task<int> CheckNoAnswerChatFourtyEightHours()
         {
-            var noAnswerChats = mySqlContent.ZJ_Chats.Where(a => a.Status == 0 && a.IsDelete == 0 && a.CreateTime <= DateTime.Now.AddHours(48)).ToList();
+            var noAnswerChats = mySqlContent.ZJ_Chats.Where(a => a.Status == 0 && a.IsDelete == 0 && a.CreateTime <= DateTime.Now.AddHours(-48)).ToList();
             foreach (var item in noAnswerChats)
             {
                 item.Status = 2;
