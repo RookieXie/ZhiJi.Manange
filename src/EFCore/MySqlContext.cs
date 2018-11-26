@@ -31,6 +31,8 @@ namespace EFCore
         public DbSet<ZJ_Chat> ZJ_Chats { get; set; }
         public DbSet<ZJ_Balance> ZJ_Balances { get; set; }
         public DbSet<ZJ_WXCommon_User> ZJ_WXCommon_Users { get; set; }
+        public DbSet<ZJ_PayOrder> ZJ_PayOrders { get; set; }
+        public DbSet<ZJ_ChatMessage> ZJ_ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +46,8 @@ namespace EFCore
             modelBuilder.Entity<ZJ_Chat>().ToTable("zj_chat");
             modelBuilder.Entity<ZJ_Balance>().ToTable("zj_balance");
             modelBuilder.Entity<ZJ_WXCommon_User>().ToTable("zj_wxcommon_user");
+            modelBuilder.Entity<ZJ_PayOrder>().ToTable("zj_pay_order");
+            modelBuilder.Entity<ZJ_ChatMessage>().ToTable("zj_chat_message");
         }
 
 
