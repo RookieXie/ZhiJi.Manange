@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.Redis;
 using Model;
+using Model.DTO;
 using Service.Interface.Service;
 using Service.Model;
 using StackExchange.Redis;
@@ -16,6 +17,10 @@ namespace Service
         private static readonly string _key_userToken = "oa_userToken_";
         private static readonly string _key_userInfo = "oa_userInfo_";
         private static readonly string _key_userMenus = "oa_userMenus_";
+        /// <summary>
+        /// 键值对缓存
+        /// </summary>
+        private static readonly string _keyValueManager = "KeyValueManager";
         public TimeSpan DefaultTimeSpan { get; set; } = new TimeSpan(1, 0, 0, 0);
         private readonly IDatabase redis ;
 
@@ -112,6 +117,40 @@ namespace Service
             //    throw new Exception(ErrorDefine.redisUserInfoIsNull);
             //}
             return userInfo;
+        }
+        /// <summary>
+        /// 获取键值对缓存
+        /// </summary>
+        /// <returns></returns>
+        public List<KeyValueInfo> GetKeyValues()
+        {
+            return redis.GetCache<List<KeyValueInfo>>(_keyValueManager);
+        }
+
+        /// <summary>
+        /// 设置键值对缓存
+        /// </summary>
+        /// <returns></returns>
+        public bool SetKeyValues(List<KeyValueInfo> list)
+        {
+            return redis.SetCache(_keyValueManager, list, TimeSpan.MaxValue);
+        }
+        /// <summary>
+        /// 删除键值对缓存
+        /// </summary>
+        /// <param name="versions"></param>
+        /// <returns></returns>
+        public long DeleteKeyValues()
+        {
+            var res = redis.KeyDelete(_keyValueManager);
+            if (res)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

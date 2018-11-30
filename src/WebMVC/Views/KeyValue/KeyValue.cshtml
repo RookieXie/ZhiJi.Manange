@@ -1,0 +1,90 @@
+﻿@using Model.DTO;
+@{
+    ViewData["Title"] = "KeyValue";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+    List<KeyValueInfo> keyValueList = ViewBag.KeyValueInfo;
+}
+
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l"> <a href="javascript:;" onclick="nearlyBanner_add('添加','@Url.Action("KeyValue_Add")','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加键值对</a></span>
+        <span class="r">共有数据：<strong>@(keyValueList == null ? 0 : keyValueList.Count)</strong> 条</span>
+    </div>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="9">键值对</th>
+            </tr>
+            <tr class="text-c">
+                <th width="100">描述</th>
+                <th width="150">键</th>
+                <th width="100">值</th>
+                <th width="100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var keyValue in keyValueList)
+            {
+                <tr class="text-c">
+                    <td>@keyValue.Description</td>
+                    <td>@keyValue.Key</td>
+                    <td>@keyValue.Value</td>
+                    <td><a href="javascript:;" onclick="nearlyBanner_Update('编辑','@Url.Action("KeyValue_Update")','@keyValue.Key','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 修改</a><a href="javascript:;" onclick="nearlyBanner_Del('@keyValue.Key')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 删除</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+@section ScriptSection{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        /*
+            参数解释：
+            title	标题
+            url		请求的url
+            id		需要操作的数据id
+            w		弹出层宽度（缺省调默认值）
+            h		弹出层高度（缺省调默认值）
+        */
+        /*增加*/
+        function nearlyBanner_add(title, url, w, h) {
+            layer_show(title, url,w, h);
+        }
+        /*删除*/
+        function nearlyBanner_Del(key) {
+
+            layer.confirm('确认要删除吗？', function (index) {
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("KeyValue_Delete")',
+                    data: { key: key},
+                    success: function (data) {
+                        //$(obj).parents("tr").remove();
+                        layer.msg('已删除!', { icon: 1, time: 1000 });
+                        location.replace(location.href);
+                    },
+                    error: function (data) {
+                        console.log(data.msg);
+                    },
+                });
+            });
+        }
+
+        /*编辑*/
+        function nearlyBanner_Update(title, url, key, w, h) {
+
+            var url = url + "?key=" + key;
+            layer_show(title, url, w, h);
+        }
+    </script>
+}
+
+
+
+
+

@@ -10,7 +10,7 @@ namespace WebCore.Utility
     {
         public static readonly string oaUserId = "oauserid";
         public static readonly string oaToken = "oatoken";
-        public static readonly string domainTopLevel = "zhijiwen.com";
+        public static readonly string domainTopLevel = "oa.wenzhiji.com";
        
 
         public Dictionary<string, string> DomainDic { get; set; }

@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "KeyValue_Add";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+}
+<article class="page-container">
+    <form class="form form-horizontal" id="form-admin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>键：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="key" name="key">
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">值：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" id="value" name="value">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">描述：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" id="description" name="description">
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+
+@section ScriptSection{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+
+            $("#form-admin-add").validate({
+                rules: {
+                    key: {
+                        required: true,
+                    },
+
+                    value: {
+                        required: true,
+                    },
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    debugger;
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: '@Url.Action("KeyValue_AddSave")',
+                        success: function (data) {
+                            parent.window.location.href = "/KeyValue/KeyValue";
+                                layer.msg('添加成功!', { icon: 1, time: 1000 });
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            //layer.msg('error!', { icon: 2, time: 1000 });
+                        }
+                    });
+
+                }
+            });
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+}
+
+
+
+
+
