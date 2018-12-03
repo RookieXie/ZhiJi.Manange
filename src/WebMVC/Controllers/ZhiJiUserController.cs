@@ -30,17 +30,25 @@ namespace WebMVC.Controllers
             int totalCount = 0;
             List<ZJ_User> users = new List<ZJ_User>();
             var skipCount = (pageIndex - 1) * pageSize;
-            if (status == -1)
+            if (!string.IsNullOrEmpty(userId))
             {
-                totalCount = _eFContext.ZJ_Users.AsNoTracking().Count();
-                users = _eFContext.ZJ_Users.AsNoTracking().Skip(skipCount).Take(pageSize).ToList();
+                totalCount = _eFContext.ZJ_Users.AsNoTracking().Where(a => a.Numbers == userId).Count();
+                users = _eFContext.ZJ_Users.AsNoTracking().Where(a => a.Numbers == userId).Skip(skipCount).Take(pageSize).ToList();
             }
             else
             {
-                totalCount = _eFContext.ZJ_Users
-                    .Where(a => a.UserType == status).AsNoTracking().Count();
-                users = _eFContext.ZJ_Users.AsNoTracking()
-                    .Where(a => a.UserType == status).Skip(skipCount).Take(pageSize).ToList();
+                if (status == -1)
+                {
+                    totalCount = _eFContext.ZJ_Users.AsNoTracking().Count();
+                    users = _eFContext.ZJ_Users.AsNoTracking().Skip(skipCount).Take(pageSize).ToList();
+                }
+                else
+                {
+                    totalCount = _eFContext.ZJ_Users
+                        .Where(a => a.UserType == status).AsNoTracking().Count();
+                    users = _eFContext.ZJ_Users.AsNoTracking()
+                        .Where(a => a.UserType == status).Skip(skipCount).Take(pageSize).ToList();
+                }
             }
             ViewBag.Users = users;
             ViewBag.PageInfo = new PageInfo

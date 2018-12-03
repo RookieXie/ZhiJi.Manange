@@ -13,7 +13,7 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 知几用户列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
     <div class="text-c">
-        用户id:<input type="text" class="input-text" style="width:100px" placeholder="输入id" id="searchKey" name="" value="@userId">
+        知几号:<input type="text" class="input-text" style="width:100px" placeholder="输入id" id="searchKey" name="" value="@userId">
 
         用户类型:<select id="GuildSelector" name="GuildId" class="select" style="width:100px;">
             <option value="-1" selected=@(status==-1?true:false)>全部</option>
@@ -29,7 +29,7 @@
             </tr>
             <tr class="text-c">
                 @*<th width="25"><input type="checkbox" name="" value=""></th>*@
-                <th width="40">ID</th>
+                <th width="40">知几号</th>
                 <th width="90">昵称</th>
                 <th width="130">头像</th>
                 <th width="100">是否答主</th>
@@ -46,7 +46,7 @@
                 var index = i + 1;
                 <tr class="text-c">
                     @*<td><input type="checkbox" value="@anchors[i].AnchorId" name="checkbox"></td>*@
-                    <td>@users[i].FId</td>
+                    <td>@users[i].Numbers</td>
                     <td>@users[i].NickName</td>
                     @*<td>@(!string.IsNullOrEmpty(anchors[i].GuildNames) ? anchors[i].GuildNames + "(Id:" + anchors[i].GuildCode + ")" : "")</td>*@
 

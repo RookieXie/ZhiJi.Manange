@@ -76,7 +76,8 @@ namespace WebCore
             services.AddTransient<IRedisService, RedisService>();
             services.AddTransient<ILogHelper, NLogHelper>();
             services.AddTransient<ITaskHangFire, TaskHangFire>();
-            
+            services.AddTransient<IWXPayHelper, WXPayHelper>();
+
             //services.Configure<RedisSetting>(Configuration.GetSection("RedisSetting"));
 
             //Log.Init(1, 1024000, "yyyyMMdd", Directory.GetCurrentDirectory()+ "/Log", (LogType)1);

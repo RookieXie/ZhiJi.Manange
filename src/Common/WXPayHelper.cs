@@ -18,17 +18,22 @@ namespace Common
         * KEY：商户支付密钥，参考开户邮件设置（必须配置）
         * APPSECRET：小程序secert（仅JSAPI支付的时候需要配置） 
         */
-        public const string APPID = "wxc6ba72372cd614a3";
-        public const string MCHID = "1407828102";
-        public const string KEY = "BaoMiHuaWangYDWeiXinZhiFu2016721";
-        public const string APPSECRET = "3567588abf92e45586b6aa6de0577ff7";
+        public const string APPID = "";
+        public const string MCHID = "";
+        public const string KEY = "";
+        public const string APPSECRET = "";
 
-        public const string SSLCERT_PATH = "cert/apiclient_cert.p12";
+        public const string SSLCERT_PATH = "";
         public const string SSLCERT_PASSWORD = "";
+        private readonly ILogHelper logger;
+        public WXPayHelper(ILogHelper logger)
+        {
+            this.logger = logger;
+        }
         /// <summary>
         /// 统一下单
         /// </summary>
-        public async Task<SortedDictionary<string, object>> Unifiedorder(string strBody, string ip, string openid, string payOrderNo, decimal total_fee)
+        public async Task<SortedDictionary<string, object>> Unifiedorder(string strBody, string ip, string openid, string payOrderNo, int total_fee)
         {
 
             SortedDictionary<string, object> data = new SortedDictionary<string, object>();
@@ -47,28 +52,36 @@ namespace Common
             data.Add("spbill_create_ip", ip);//终端ip	
             data.Add("time_start", DateTime.Now.ToString("yyyyMMddHHmmss"));
             data.Add("time_expire", DateTime.Now.AddMinutes(10).ToString("yyyyMMddHHmmss"));
-            data.Add("goods_tag", "WXG");
-            data.Add("notify_url", "https://wenzhiji.com/Api/v1/WXPay/WxPayReturnBack");//异步通知url
+            data.Add("goods_tag", "");
+            data.Add("notify_url", "https://wenzhiji.com/Api/v1/WXCommon/WxPayReturnBack");//异步通知url
 
 
             data.Add("trade_type", "JSAPI");
 
-            //data.Add("product_id")
+            data.Add("product_id", "");
+            data.Add("limit_pay", "");
             data.Add("openid", openid);
             //签名
             data.Add("sign", MakeSign(data));
             string xml = ToXml(data);
+            logger.LogDebug($"Unifiedorder  xml={xml}");
             using (HttpClient httpClient = new HttpClient())
             {
                 var url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
                 HttpContent httpContent = new StringContent(xml);
                 var reps = await httpClient.PostAsync(url, httpContent);
                 var resStr = await reps.Content.ReadAsStringAsync();
+                logger.LogDebug($"Unifiedorder  resStr={resStr}");
                 data = FromXml(resStr);
                 // UnifiedorderModel
                 return data;
             }
         }
+        /// <summary>
+        /// 查询订单
+        /// </summary>
+        /// <param name="payOrderNo"></param>
+        /// <returns></returns>
         public async Task<SortedDictionary<string, object>> Queryorder(string payOrderNo)
         {
 
@@ -91,8 +104,15 @@ namespace Common
                 return data;
             }
         }
-
-        public async Task<SortedDictionary<string, object>> Refund(string refundNo, string openid, string payOrderNo, decimal total_fee)
+        /// <summary>
+        /// 退款
+        /// </summary>
+        /// <param name="refundNo"></param>
+        /// <param name="openid"></param>
+        /// <param name="payOrderNo"></param>
+        /// <param name="total_fee"></param>
+        /// <returns></returns>
+        public async Task<SortedDictionary<string, object>> Refund(string refundNo, string openid, string payOrderNo, int total_fee)
         {
 
             SortedDictionary<string, object> data = new SortedDictionary<string, object>();
@@ -108,26 +128,40 @@ namespace Common
             data.Add("total_fee", total_fee);
             data.Add("refund_fee", total_fee);
             data.Add("refund_desc", "答主未回答，退还付款");
-            data.Add("notify_url", "https://wenzhiji.com/Api/v1/WXPay/WxRefundReturnBack");//异步通知url
+            data.Add("notify_url", "https://wenzhiji.com/Api/v1/WXCommon/WxRefundReturnBack");//异步通知url
 
 
             //签名
             data.Add("sign", MakeSign(data));
             string xml = ToXml(data);
-
-            using (var handler = new HttpClientHandler())
+            logger.LogDebug($"Refund  xml={xml}");
+            try
             {
-                handler.ClientCertificates.Add(new X509Certificate2(SSLCERT_PATH, SSLCERT_PASSWORD));
-                using (HttpClient httpClient = new HttpClient(handler))
+                using (var handler = new HttpClientHandler())
                 {
-                    var url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
-                    HttpContent httpContent = new StringContent(xml);
-                    var reps = await httpClient.PostAsync(url, httpContent);
-                    var resStr = await reps.Content.ReadAsStringAsync();
-                    data = FromXml(resStr);
-                    return data;
+                    logger.LogDebug($"Refund  handler=1");
+                    handler.ClientCertificates.Add(new X509Certificate2(SSLCERT_PATH, SSLCERT_PASSWORD));
+
+                    logger.LogDebug($"Refund  handler=2");
+                    using (HttpClient httpClient = new HttpClient(handler))
+                    {
+                        var url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+                        HttpContent httpContent = new StringContent(xml);
+                        var reps = await httpClient.PostAsync(url, httpContent);
+                        var resStr = await reps.Content.ReadAsStringAsync();
+                        data = FromXml(resStr);
+                        logger.LogDebug($"Refund  resStr={resStr}");
+                        return data;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                logger.LogDebug($"Refund  Exception={ex.Message}");
+                //throw;
+                return data;
+            }
+
         }
         private string ToXml(SortedDictionary<string, object> keyValues)
         {
@@ -279,6 +313,53 @@ namespace Common
                 sb.Append(b.ToString("x2"));
             }
             return sb.ToString().ToUpper();
+        }
+
+        /// <summary>
+        /// 提现功能
+        /// </summary>
+        public async Task<SortedDictionary<string, object>> WithdrawTransfers(string realName, string ip, string openid, string withdrawNo, int total_fee)
+        {
+            SortedDictionary<string, object> data = new SortedDictionary<string, object>();
+            data.Add("mch_appid", APPID);
+            data.Add("mchid", MCHID);
+            data.Add("device_info", "WEB");
+            data.Add("nonce_str", GenerateNonceStr());
+            //data.Add("sign_type", "MD5");
+
+            //data.Add("detail", "");
+            //data.Add("attach", "");
+            data.Add("partner_trade_no", withdrawNo);
+
+            data.Add("openid", openid);
+
+
+
+            data.Add("check_name", "FORCE_CHECK");
+
+            data.Add("re_user_name", realName);
+            data.Add("amount", total_fee);
+            data.Add("desc", "提现");
+            data.Add("spbill_create_ip", ip);//终端ip	
+
+            //签名
+            data.Add("sign", MakeSign(data));
+            string xml = ToXml(data);
+            logger.LogDebug($"WithdrawTransfers  xml={xml}");
+            using (var handler = new HttpClientHandler())
+            {
+                handler.ClientCertificates.Add(new X509Certificate2(SSLCERT_PATH, SSLCERT_PASSWORD));
+                using (HttpClient httpClient = new HttpClient(handler))
+                {
+                    var url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+                    HttpContent httpContent = new StringContent(xml);
+                    var reps = await httpClient.PostAsync(url, httpContent);
+                    var resStr = await reps.Content.ReadAsStringAsync();
+                    data = FromXml(resStr);
+                    logger.LogDebug($"WithdrawTransfers  resStr={resStr}");
+                    return data;
+                }
+            }
         }
     }
 }
