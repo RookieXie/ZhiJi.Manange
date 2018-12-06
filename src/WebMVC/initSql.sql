@@ -10,7 +10,7 @@ CREATE TABLE `Admin_Menu` (
   `Type` int(11) DEFAULT NULL,
   `Url` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Admin_Role` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -19,7 +19,7 @@ CREATE TABLE `Admin_Role` (
   `Status` int(11) NOT NULL,
   `StatusTime` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Admin_RoleAndMenu` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE `Admin_RoleAndMenu` (
   KEY `IX_Admin_RoleAndMenu_RoleId` (`RoleId`),
   CONSTRAINT `FK_Admin_RoleAndMenu_Admin_Menu_MenuId` FOREIGN KEY (`MenuId`) REFERENCES `Admin_Menu` (`Id`) ON DELETE CASCADE,
   CONSTRAINT `FK_Admin_RoleAndMenu_Admin_Role_RoleId` FOREIGN KEY (`RoleId`) REFERENCES `Admin_Role` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Admin_User` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE `Admin_User` (
   `StatusTime` datetime(6) NOT NULL,
   `Gender` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Admin_UserAndRole` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,7 +60,7 @@ CREATE TABLE `Admin_UserAndRole` (
   KEY `IX_Admin_UserAndRole_UserId` (`UserId`),
   CONSTRAINT `FK_Admin_UserAndRole_Admin_Role_RoleId` FOREIGN KEY (`RoleId`) REFERENCES `Admin_Role` (`Id`) ON DELETE CASCADE,
   CONSTRAINT `FK_Admin_UserAndRole_Admin_User_UserId` FOREIGN KEY (`UserId`) REFERENCES `Admin_User` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 /*业务*/
 CREATE TABLE `zj_balance` (
@@ -68,6 +68,7 @@ CREATE TABLE `zj_balance` (
   `FId` varchar(100) DEFAULT NULL,
   `UserId` varchar(100) DEFAULT NULL,
   `AdverseId` varchar(100) DEFAULT NULL,
+  `ChangeType` int(2) DEFAULT '0',
   `ChangeMoney` decimal(18,2) DEFAULT '0.00',
   `BeforeMoney` decimal(18,2) DEFAULT '0.00',
   `AfterMoney` decimal(18,2) DEFAULT '0.00',
@@ -75,7 +76,7 @@ CREATE TABLE `zj_balance` (
   `IsDelete` int(1) DEFAULT '0' COMMENT '0-未删，1-已删',
   PRIMARY KEY (`Id`),
   KEY `index_FId` (`FId`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `zj_chat` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -89,12 +90,28 @@ CREATE TABLE `zj_chat` (
   `IsDelete` int(1) DEFAULT '0' COMMENT '0-未删，1-已删',
   PRIMARY KEY (`Id`),
   KEY `index_FId` (`FId`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `zj_chat_message` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `FId` varchar(100) DEFAULT NULL,
+  `ChatId` varchar(100) DEFAULT NULL,
+  `SendId` varchar(100) DEFAULT NULL,
+  `ReciveId` varchar(100) DEFAULT NULL,
+  `SendType` int(1) DEFAULT '0' COMMENT ' 0 用户创建提问 1 答主回复 2 答主拒绝 3 正常',
+  `MsgType` varchar(100) DEFAULT NULL COMMENT 'text 文字  image 图片 audio 语音',
+  `MsgContent` varchar(500) DEFAULT NULL,
+  `AudioTimes` int(10) DEFAULT '0' COMMENT '语音秒数',
+  `CreateTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `IsDelete` int(1) DEFAULT '0' COMMENT '0-未删，1-已删',
+  PRIMARY KEY (`Id`),
+  KEY `index_FId` (`FId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zj_pay_order` (
   `Id` int(12) NOT NULL AUTO_INCREMENT,
   `FId` varchar(100) DEFAULT NULL COMMENT 'Id主键',
-  `UserId` int(12) NOT NULL COMMENT '用户Id',
-  `ChatId` int(10) DEFAULT NULL COMMENT '聊天Id',
+  `UserId` varchar(100) NOT NULL COMMENT '用户Id',
+  `ChatId` varchar(100) DEFAULT NULL COMMENT '聊天Id',
   `OrderNo` varchar(100) DEFAULT NULL COMMENT '订单号',
   `SerialNo` varchar(100) DEFAULT NULL COMMENT '流水号',
   `TransType` int(10) DEFAULT NULL COMMENT '交易类型（1）',
@@ -112,7 +129,7 @@ CREATE TABLE `zj_pay_order` (
   PRIMARY KEY (`Id`),
   KEY `index_UserId` (`UserId`),
   KEY `index_OrderNo` (`OrderNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='支付订单表';
 
 CREATE TABLE `zj_user` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -136,7 +153,7 @@ CREATE TABLE `zj_user` (
   `Numbers` varchar(400) DEFAULT NULL COMMENT '知几号',
   PRIMARY KEY (`Id`),
   KEY `index_FId` (`FId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10034 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `zj_wxcommon_user` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -148,4 +165,4 @@ CREATE TABLE `zj_wxcommon_user` (
   `IsDelete` int(1) DEFAULT '0' COMMENT '0-未删，1-已删',
   PRIMARY KEY (`Id`),
   KEY `index_FId` (`FId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

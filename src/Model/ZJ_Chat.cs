@@ -15,5 +15,9 @@ namespace Model
         public string AnswerId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        /// <summary>
+        /// 小时数
+        /// </summary>
+        public Decimal AnswerTime { get; set; }
     }
 }

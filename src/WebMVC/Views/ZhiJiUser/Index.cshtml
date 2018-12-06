@@ -30,6 +30,7 @@
             <tr class="text-c">
                 @*<th width="25"><input type="checkbox" name="" value=""></th>*@
                 <th width="40">知几号</th>
+                <th width="40">注册时间</th>
                 <th width="90">昵称</th>
                 <th width="130">头像</th>
                 <th width="100">是否答主</th>
@@ -44,37 +45,38 @@
             @for (int i = 0; i < users.Count; i++)
             {
                 var index = i + 1;
-                <tr class="text-c">
-                    @*<td><input type="checkbox" value="@anchors[i].AnchorId" name="checkbox"></td>*@
-                    <td>@users[i].Numbers</td>
-                    <td>@users[i].NickName</td>
-                    @*<td>@(!string.IsNullOrEmpty(anchors[i].GuildNames) ? anchors[i].GuildNames + "(Id:" + anchors[i].GuildCode + ")" : "")</td>*@
+            <tr class="text-c">
+                @*<td><input type="checkbox" value="@anchors[i].AnchorId" name="checkbox"></td>*@
+                <td>@users[i].Numbers</td>
+                <td>@users[i].CreateTime</td>
+                <td>@users[i].NickName</td>
+                @*<td>@(!string.IsNullOrEmpty(anchors[i].GuildNames) ? anchors[i].GuildNames + "(Id:" + anchors[i].GuildCode + ")" : "")</td>*@
 
-                    <td><img width="80" class="picture-thumb" src="@users[i].HeadImg"></td>
+                <td><img width="80" class="picture-thumb" src="@users[i].HeadImg"></td>
 
-                    @if (users[i].UserType == 1)
-                    {
+                @if (users[i].UserType == 1)
+                {
 
-                        <td class="td-status"><span class="label label-success radius">答主</span></td>
-                    }
-                    else
-                    {
-                        <td class="td-status"><span class="label radius">用户</span></td>
+                    <td class="td-status"><span class="label label-success radius">答主</span></td>
+                }
+                else
+                {
+                    <td class="td-status"><span class="label radius">用户</span></td>
 
-                    }
+                }
 
 
-                    <td>@users[i].AnswerTime 小时</td>
-                    <td>@users[i].AnswerPrice 元</td>
+                <td>@users[i].AnswerTime 小时</td>
+                <td>@users[i].AnswerPrice 元</td>
 
-                    @*<a style="text-decoration:none" onClick="admin_stop(this,'@anchor[i].Id')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe631;</i></a>*@
-                    <td class="td-manage">
-                        <a title="编辑" href="javascript:;" onclick="anchor_edit_phone('主播编辑','@Url.Action("Index_Update")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                @*<a style="text-decoration:none" onClick="admin_stop(this,'@anchor[i].Id')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe631;</i></a>*@
+                <td class="td-manage">
+                    <a title="编辑" href="javascript:;" onclick="anchor_edit_phone('主播编辑','@Url.Action("Index_Update")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
 
-                        @*<a title="上下架" href="javascript:;" onclick="anchor_edit_videoId('主播编辑','@Url.Action("Edit_VideoId")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>*@
-                    </td>
+                    @*<a title="上下架" href="javascript:;" onclick="anchor_edit_videoId('主播编辑','@Url.Action("Edit_VideoId")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>*@
+                </td>
 
-                </tr>
+            </tr>
             }
 
         </tbody>

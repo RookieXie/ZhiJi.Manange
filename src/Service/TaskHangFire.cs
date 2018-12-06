@@ -57,7 +57,7 @@ namespace Service
                 //转移到账上
                 var zj_UserA = mySqlContent.ZJ_Users.Where(a => a.FId == item.AnswerId)
                 .FirstOrDefault();
-                var _payOrder = mySqlContent.ZJ_PayOrders.Where(a => a.ChatId == item.FId).FirstOrDefault();
+                var _payOrder = mySqlContent.ZJ_PayOrders.Where(a =>  a.ChatId == item.FId).FirstOrDefault();
                 if (zj_UserA != null && _payOrder != null)
                 {
                     var totalMoney = zj_UserA.TotalMoney + _payOrder.Money;

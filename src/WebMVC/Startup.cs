@@ -45,6 +45,8 @@ namespace WebCore
             services.AddDbContext<MySqlContext>(options =>
        options.UseMySql(Configuration.GetConnectionString("MysqlConnection")));
 
+       //     services.AddDbContext<OfficialMySqlContext>(options =>
+       //options.UseMySql(Configuration.GetConnectionString("OfficialMySqlConnection")));
             //services.Configure<DBMonoUtility.DBInitOption>(Configuration.GetSection("DBinitOption"));
 
             services.AddMvc(

@@ -18,13 +18,13 @@ namespace Common
         * KEY：商户支付密钥，参考开户邮件设置（必须配置）
         * APPSECRET：小程序secert（仅JSAPI支付的时候需要配置） 
         */
-        public const string APPID = "";
-        public const string MCHID = "";
-        public const string KEY = "";
-        public const string APPSECRET = "";
+        public const string APPID = "wxc6ba72372cd614a3";
+        public const string MCHID = "1516575911";
+        public const string KEY = "BAOMIHUA2SPSJboyiboZHIJI20181120";
+        public const string APPSECRET = "3567588abf92e45586b6aa6de0577ff7";
 
-        public const string SSLCERT_PATH = "";
-        public const string SSLCERT_PASSWORD = "";
+        public const string SSLCERT_PATH = "C:\\cert\\apiclient_cert.p12";
+        public const string SSLCERT_PASSWORD = "1516575911";
         private readonly ILogHelper logger;
         public WXPayHelper(ILogHelper logger)
         {
