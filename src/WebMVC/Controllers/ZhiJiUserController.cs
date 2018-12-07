@@ -6,6 +6,8 @@ using EFCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.HomeListCach;
+using Service.Interface.Service;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers
@@ -13,9 +15,11 @@ namespace WebMVC.Controllers
     public class ZhiJiUserController : Controller
     {
         private readonly MySqlContext _eFContext;
-        public ZhiJiUserController(MySqlContext eFContext)
+        private readonly IRedisService redisService;
+        public ZhiJiUserController(MySqlContext eFContext, IRedisService redisService)
         {
             _eFContext = eFContext;
+            this.redisService = redisService;
         }
         /// <summary>
         /// 
@@ -29,6 +33,7 @@ namespace WebMVC.Controllers
             int pageSize = PageHelper.GetPageSize(Request);
             int totalCount = 0;
             List<ZJ_User> users = new List<ZJ_User>();
+            List<HomeUsers> homeUsers = new List<HomeUsers>();
             var skipCount = (pageIndex - 1) * pageSize;
             if (!string.IsNullOrEmpty(userId))
             {
@@ -50,7 +55,14 @@ namespace WebMVC.Controllers
                         .Where(a => a.UserType == status).Skip(skipCount).Take(pageSize).ToList();
                 }
             }
-            ViewBag.Users = users;
+            foreach (var item in users)
+            {
+                var homeuser = new HomeUsers(item);
+                var user= redisService.GetUserRedis(item.FId);
+                homeuser.Order = user != null ? user.Order : 0;
+                homeUsers.Add(homeuser);
+            }
+            ViewBag.Users = homeUsers;
             ViewBag.PageInfo = new PageInfo
             {
                 Count = totalCount,
@@ -79,9 +91,28 @@ namespace WebMVC.Controllers
                 _user.AnswerPrice = user.AnswerPrice;
                 _user.AnswerTime = user.AnswerTime;
                 _eFContext.ZJ_Users.Update(_user);
+                redisService.SetUserRedis(_user);
             }
             _eFContext.SaveChanges();
+            
             return "ok";
+        }
+        public IActionResult Index_Edit_UserOrder(string userId, int order)
+        {
+            ViewBag.UserId = userId;
+            ViewBag.Order = order;
+            return View();
+        }
+
+        public string Index_Edit_UserOrderSave(string userId, int order)
+        {
+            var user=redisService.GetUserRedis(userId);
+            if (user !=null)
+            {
+                user.Order = order;
+                redisService.SetUserRedis(user);                
+            }
+            return "1";
         }
     }
 }

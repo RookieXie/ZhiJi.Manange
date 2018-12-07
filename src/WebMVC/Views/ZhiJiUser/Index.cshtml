@@ -1,9 +1,9 @@
 ﻿@using WebMVC.Models;
-@using Model;
+@using Model.HomeListCach;
 @{
     ViewData["Title"] = "主播列表";
     Layout = "~/Views/Shared/_HUI.cshtml";
-    List<ZJ_User> users = ViewBag.Users;
+    List<HomeUsers> users = ViewBag.Users;
     string userId = ViewBag.userId;
     int status = ViewBag.status;
     PageInfo pageInfo = ViewBag.PageInfo;
@@ -37,7 +37,7 @@
 
                 <th width="100">问答时长</th>
                 <th width="100">价格</th>
-
+                <th width="100">排序权重</th>
                 <th width="100">操作</th>
             </tr>
         </thead>
@@ -68,10 +68,12 @@
 
                 <td>@users[i].AnswerTime 小时</td>
                 <td>@users[i].AnswerPrice 元</td>
+                <td><a onclick="order_edit('@users[i].UserId','@users[i].Order')">@users[i].Order</a></td>
+                
 
                 @*<a style="text-decoration:none" onClick="admin_stop(this,'@anchor[i].Id')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe631;</i></a>*@
                 <td class="td-manage">
-                    <a title="编辑" href="javascript:;" onclick="anchor_edit_phone('主播编辑','@Url.Action("Index_Update")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a title="编辑" href="javascript:;" onclick="anchor_edit_phone('主播编辑','@Url.Action("Index_Update")','@users[i].UserId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
 
                     @*<a title="上下架" href="javascript:;" onclick="anchor_edit_videoId('主播编辑','@Url.Action("Edit_VideoId")','@users[i].FId','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>*@
                 </td>
@@ -115,6 +117,10 @@
            var url = "@Url.Action("index")" + "?userId=" + searchKey + "&status=" + GuildSelectorId;
             location.replace(url);
         };
+        function order_edit(userId, order) {
+            var url = "@Url.Action("Index_Edit_UserOrder")" + "?userId=" + userId + "&order=" + order;
+            layer_show("编辑排序", url, 800, 500);
+        }
     </script>
 }
 

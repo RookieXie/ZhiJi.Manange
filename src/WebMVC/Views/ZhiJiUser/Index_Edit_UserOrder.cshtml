@@ -1,0 +1,93 @@
+﻿@using Model;
+@{
+    ViewData["Title"] = "EditAnchor";
+    Layout = "~/Views/Shared/_HUI.cshtml";
+
+    string userId = ViewBag.UserId;
+    int order = ViewBag.Order;
+}
+
+
+
+<article class="page-container">
+    <form class="form form-horizontal" id="form-admin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">用户Id：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="@userId" id="userId" name="userId" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">排序权重：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="@order" id="order" name="order">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+
+        </div>
+    </form>
+
+</article>
+
+@section ScriptSection{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+
+
+    $(function () {
+
+    $('.skin-minimal input').iCheck({
+    checkboxClass: 'icheckbox-blue',
+    radioClass: 'iradio-blue',
+    increaseArea: '20%'
+    });
+
+    $("#form-admin-add").validate({
+    rules: {
+
+
+    phone: {
+    //required: true,
+    isPhone: true,
+    },
+    //email: {
+    //    required: true,
+    //    email: true,
+    //},
+    },
+    onkeyup: false,
+    focusCleanup: true,
+    success: "valid",
+    submitHandler: function (form) {
+
+    $(form).ajaxSubmit({
+    type: 'post',
+    url: '@Url.Action("Index_Edit_UserOrderSave")',
+    success: function (data) {
+        //parent.window.location.href = "";
+        layer.msg('修改成功!', { icon: 1, time: 1000 });
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    },
+    error: function (XmlHttpRequest, textStatus, errorThrown) {
+    //layer.msg('error!', { icon: 2, time: 1000 });
+    }
+    });
+
+    }
+    });
+    });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+}
+
+

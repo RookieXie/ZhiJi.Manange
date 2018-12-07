@@ -2,6 +2,7 @@
 using Common.Redis;
 using Model;
 using Model.DTO;
+using Model.HomeListCach;
 using Service.Interface.Service;
 using Service.Model;
 using StackExchange.Redis;
@@ -9,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Service
 {
-    public class RedisService: IRedisService
+    public class RedisService : IRedisService
     {
         private static readonly string _key_userToken = "oa_userToken_";
         private static readonly string _key_userInfo = "oa_userInfo_";
@@ -22,11 +24,11 @@ namespace Service
         /// </summary>
         private static readonly string _keyValueManager = "KeyValueManager";
         public TimeSpan DefaultTimeSpan { get; set; } = new TimeSpan(1, 0, 0, 0);
-        private readonly IDatabase redis ;
+        private readonly IDatabase redis;
 
         public RedisService(RedisCore redisCore)
         {
-            redis= redisCore.RedisDB;
+            redis = redisCore.RedisDB;
         }
 
         public void AddUserLoginInfo(string token, AdminUser user, List<AdminMenu> menus)
@@ -85,7 +87,7 @@ namespace Service
             userInfo.Phone = user.Phone;
             userInfo.RealName = user.RealName;
             userInfo.PwdFlag = user.PwdFlag;
-            userInfo.Type = user.Type??0;
+            userInfo.Type = user.Type ?? 0;
             userInfo.Roles = user.UserRoles.Select(ur => new AdminRole
             {
                 Id = ur.RoleId,
@@ -151,6 +153,45 @@ namespace Service
             {
                 return 0;
             }
+        }
+
+        public async Task<bool> SetUserRedis(ZJ_User zJ_User)
+        {
+            var homeUser = new HomeUsers(zJ_User);
+            var userModelJson = redis.HashGet("HomeUsers", String.Format("UserId_{0}", homeUser.UserId));
+            var res = false;
+            if (userModelJson.IsNullOrEmpty)
+            {
+                res = await redis.HashSetAsync("HomeUsers", $"UserId_{homeUser.UserId}", JsonHelper.SerializeObject(homeUser));
+            }
+            else
+            {
+                HomeUsers _model = JsonHelper.DeserializeObject<HomeUsers>(userModelJson);
+                homeUser.Order = _model.Order;
+                res = await redis.HashSetAsync("HomeUsers", $"UserId_{homeUser.UserId}", JsonHelper.SerializeObject(homeUser));
+            }
+
+            return res;
+        }
+        public HomeUsers GetUserRedis(string userId)
+        {
+            var userModelJson = redis.HashGet("HomeUsers", String.Format("UserId_{0}", userId));
+            if (userModelJson.IsNullOrEmpty)
+            {
+                return null;
+            }
+            else
+            {
+                HomeUsers homeUser = JsonHelper.DeserializeObject<HomeUsers>(userModelJson);
+                return homeUser;
+            }
+        }
+        public async Task<bool> SetUserRedis(HomeUsers homeUser)
+        {
+            var res = await redis.HashSetAsync("HomeUsers", $"UserId_{homeUser.UserId}", JsonHelper.SerializeObject(homeUser));
+
+
+            return res;
         }
     }
 }

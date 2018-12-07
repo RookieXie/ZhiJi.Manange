@@ -1,9 +1,11 @@
 ﻿using Model;
 using Model.DTO;
+using Model.HomeListCach;
 using Service.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Service.Interface.Service
 {
@@ -36,5 +38,8 @@ namespace Service.Interface.Service
         /// <param name="versions"></param>
         /// <returns></returns>
         long DeleteKeyValues();
+        Task<bool> SetUserRedis(ZJ_User zJ_User);
+        HomeUsers GetUserRedis(string userId);
+        Task<bool> SetUserRedis(HomeUsers homeUser);
     }
 }
